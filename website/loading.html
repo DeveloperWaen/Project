@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Loading Page</title>
+    <style>
+        @media (max-width: 768px) {
+            body, html {
+                height: 100%;
+                margin: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #1A1D25;
+                font-family: Arial, sans-serif;
+                overflow: hidden;
+            }
+            .container {
+                text-align: center;
+                animation: fadeIn 2s ease-in-out;
+            }
+            .logo {
+                width: 100px;
+                height: 100px;
+                background: url('lib/media/appicon.jpeg') no-repeat center center;
+                background-size: contain;
+                border-radius: 25%;
+                margin: 0 auto 20px auto;
+                animation: bounce 2s infinite;
+            }
+            .text {
+                font-size: 2em;
+                font-weight: bold;
+                color: #fff;
+                display: inline-block;
+            }
+            .text span {
+                display: inline-block;
+                animation: wave 2s infinite;
+            }
+            .text span:nth-child(1) { animation-delay: 0s; }
+            .text span:nth-child(2) { animation-delay: 0.2s; }
+            .text span:nth-child(3) { animation-delay: 0.4s; }
+            .text span:nth-child(4) { animation-delay: 0.6s; }
+            .text span:nth-child(5) { animation-delay: 0.8s; }
+            .text span:nth-child(6) { animation-delay: 1s; }
+
+            @keyframes fadeIn {
+                0% { opacity: 0; }
+                100% { opacity: 1; }
+            }
+            @keyframes bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-20px); }
+            }
+            @keyframes wave {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-15px); }
+            }
+        }
+    </style>
+</head>
+<body onload="redirectToRegister()">
+    <div class="container">
+        <div class="logo"></div>
+        <div class="text">
+            <span>W</span>
+            <span>i</span>
+            <span>b</span>
+            <span>u</span>
+            <span>k</span>
+            <span>u</span>
+        </div>
+    </div>
+    <script>
+        function redirectToRegister() {
+            setTimeout(function() {
+                window.location.href = "lib/utama/login.html";
+            }, 7000);
+        }
+    </script>
+</body>
+</html>
