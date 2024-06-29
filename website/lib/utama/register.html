@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Wibuku - Login</title>
+    <title>Wibuku - Registrasi</title>
     <style>
         @media (max-width: 768px) {
             body {
@@ -55,16 +55,16 @@
             .form-group button:hover {
                 background-color: #ff4c4c;
             }
-            .register-container {
+            .login-container {
                 text-align: center;
                 margin-top: 10px;
                 color: #000;
             }
-            .register-container a {
+            .login-container a {
                 color: #ff0000;
                 text-decoration: none;
             }
-            .register-container a:hover {
+            .login-container a:hover {
                 text-decoration: underline;
             }
         }
@@ -72,23 +72,28 @@
 </head>
 <body>
     <div class="container">
-        <h2>Login Akun</h2>
-        <form id="loginForm">
+        <h2>Registrasi Akun</h2>
+        <form id="registerForm">
             <div class="form-group">
+                <label for="username">Username :</label>
+                <input type="text" id="username" name="username" required>
                 <label for="email">Email :</label>
                 <input type="email" id="email" name="email" required>
+                <label for="phone">Nomor Telepon (Opsional) :</label>
+                <input type="text" id="phone" name="phone">
                 <label for="password">Password :</label>
                 <input type="password" id="password" name="password" required>
-                <button type="submit">Login</button>
+                <button type="submit">Daftar</button>
             </div>
-            <div class="register-container">
+            <div class="login-container">
                 lupa password? <a href="reset_password.html">Reset</a><br>
-                Belum memiliki akun? <a href="register.html">Registrasi</a>
+                Sudah memiliki akun? <a href="login.html">Login</a>
             </div>
         </form>
     </div>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
     <script>
         var firebaseConfig = {
             apiKey: "AIzaSyBWH5toi3j9DeY2pFIfEV_SpWhI46qWGpU",
@@ -101,21 +106,41 @@
             measurementId: "G-R755GHQ3RP"
         };
         firebase.initializeApp(firebaseConfig);
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-                window.location.href = "1_anime.html";
-            } else {
-                console.log("Pengguna belum login.");
-            }
-        });
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
+        document.getElementById('registerForm').addEventListener('submit', function(event) {
             event.preventDefault();
+            var username = document.getElementById('username').value;
             var email = document.getElementById('email').value;
+            var phone = document.getElementById('phone').value;
             var password = document.getElementById('password').value;
-            firebase.auth().signInWithEmailAndPassword(email, password)
+            if (username.length < 3 || username.length > 20) {
+                alert("Nama harus memiliki panjang antara 3 hingga 20 karakter.");
+                return;
+            }
+            if (!email.includes('@')) {
+                alert("Email harus valid dan mengandung '@'.");
+                return;
+            }
+            if (phone && !/^\d{10,15}$/.test(phone)) {
+                alert("Nomor telepon harus berupa angka dan memiliki panjang antara 10 hingga 15 digit.");
+                return;
+            }
+            if (password.length < 6) {
+                alert("Password harus memiliki panjang minimal 6 karakter.");
+                return;
+            }
+            firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    alert("Login berhasil!");
-                    window.location.href = "1_anime.html";
+                    var user = userCredential.user;
+                    return firebase.database().ref('users/' + user.uid).set({
+                        username: username,
+                        email: email,
+                        phone: phone || null,
+                        coins: 3
+                    });
+                })
+                .then(() => {
+                    alert("Registrasi berhasil!");
+                    window.location.href = "login.html";
                 })
                 .catch((error) => {
                     alert(error.message);

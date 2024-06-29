@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wibuku - Anime</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        @media (max-width: 768px) {
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #1a1d25;
+                color: #fff;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+                padding: 20px;
+                position: relative;
+            }
+            .container {
+                text-align: center;
+                width: 100%;
+                margin-top: -10px;
+            }
+            h2 {
+                font-size: 20px;
+            }
+            .search-bar {
+                width: 100%;
+                padding: 7px;
+                margin: -7px;
+                border-radius: 15px;
+                border: 1px solid #ccc;
+                font-size: 16px;
+                margin-bottom: 20px;
+                background-color: #2a2e38;
+            }
+            .search-bar::placeholder {
+                color: #ff0000;
+            }
+            .results {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                text-align: center;
+                margin: -20px;
+                max-height: calc(100vh - 220px);
+                overflow-y: auto;
+                padding-right: 0;
+            }
+            .result-item {
+                padding: 0;
+                margin: 10px;
+                flex-basis: calc(25% - 20px);
+                width: calc(25% - 20px);
+            }
+            .result-item img {
+                max-width: 100%;
+                height: auto;
+                align-items: center;
+                border-radius: 10px;
+                margin-bottom: 10px;
+                transition: transform 0.2s ease-in-out;
+            }
+            .result-item:hover img {
+                transform: scale(1.1);
+            }
+            .title {
+                font-size: 9px;
+                margin: -10px;
+                text-align: center;
+                color: #fff;
+            }
+            nav {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #2a2e38;
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 0;
+            }
+            nav a {
+                color: #fff;
+                text-decoration: none;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                flex: 1;
+            }
+            nav a.active {
+                color: #ff0000;
+            }
+            nav a:hover {
+                color: #ff4c4c;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Wibuku - Anime</h2>
+        <input type="text" id="searchBar" class="search-bar" placeholder="Cari judul anime...">
+        <div id="results" class="results"></div>
+    </div>
+    <nav>
+        <a href="#" class="active"><i class="material-icons">home</i></a>
+        <a href="2_manga.html"><i class="material-icons">menu_book</i></a>
+        <a href="3_catalog.html"><i class="material-icons">library_books</i></a>
+        <a href="4_chat.html"><i class="material-icons">chat</i></a>
+        <a href="5_contact.html"><i class="material-icons">contact_support</i></a>
+        <a href="6_profile.html"><i class="material-icons">account_circle</i></a>
+    </nav>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyBWH5toi3j9DeY2pFIfEV_SpWhI46qWGpU",
+            authDomain: "website-180428.firebaseapp.com",
+            databaseURL: "https://website-180428-default-rtdb.firebaseio.com",
+            projectId: "website-180428",
+            storageBucket: "website-180428.appspot.com",
+            messagingSenderId: "78642885256",
+            appId: "1:78642885256:web:125a0324958f8cf278653d",
+            measurementId: "G-R755GHQ3RP"
+        };
+        firebase.initializeApp(firebaseConfig);
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (!user) window.location.href = "login.html";
+        });
+        var animeData = [
+            { title: "2.43: Seiin Koukou Danshi Volley-bu", img: "../anime/image/2.43__seiin_koukou_danshi_volley-bu.jpeg", link: "../anime/2.43__seiin_koukou_danshi_volley-bu.html" },
+            { title: "3-gatsu no Lion", img: "../anime/image/3-gatsu_no_lion.jpeg", link: "../anime/3-gatsu_no_lion.html" },
+            { title: "3-gatsu no Lion Season 2", img: "../anime/image/3-gatsu_no_lion_season_2.jpeg", link: "../anime/3-gatsu_no_lion_season_2.html" },
+            { title: "3D Kanojo: Real Girl", img: "../anime/image/3d_kanojo__real_girl.jpeg", link: "../anime/3d_kanojo__real_girl.html" },
+            { title: "3D Kanojo: Real Girl Season 2", img: "../anime/image/3d_kanojo__real_girl_season_2.jpeg", link: "../anime/3d_kanojo__real_girl_season_2.html" }
+        ];
+        function renderAnime(animeList) {
+            document.getElementById('results').innerHTML = animeList.map(anime => `
+                <div class="result-item">
+                    <a href="${anime.link}">
+                        <img src="${anime.img}" alt="${anime.title}">
+                    </a>
+                    <div class="title">${anime.title}</div>
+                </div>`).join('');
+        }
+        document.getElementById('searchBar').addEventListener('input', function() {
+            var searchQuery = this.value.toLowerCase();
+            renderAnime(animeData.filter(anime => anime.title.toLowerCase().includes(searchQuery)));
+        });
+        renderAnime(animeData);
+    </script>
+</body>
+</html>

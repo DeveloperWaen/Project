@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wibuku - Catalog</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <style>
+        @media (max-width: 768px) {
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #1a1d25;
+                color: #fff;
+                display: flex;
+                flex-direction: column;
+                height: 100vh;
+                margin: 0;
+                padding: 0;
+            }
+            .container {
+                width: 100%;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                margin-top: 10px;
+            }
+            h2 {
+                font-size: 20px;
+                text-align: center;
+            }
+            .ctgh {
+                margin-left: 10px;
+            }
+            .results {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                margin-top: 10px;
+                padding: 0 10px;
+            }
+            .result-item {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+                max-width: 300px;
+                text-align: left;
+                cursor: pointer;
+                transition: transform 0.2s ease-in-out;
+            }
+            .result-item:hover {
+                transform: translateY(-5px);
+            }
+            .result-item img {
+                width: 50px;
+                height: 50px;
+                border-radius: 50px;
+                margin-right: 10px;
+                transition: transform 0.2s ease-in-out;
+            }
+            .result-item:hover img {
+                transform: scale(1.1);
+            }
+            .title {
+                font-size: 12px;
+                color: #fff;
+                text-align: left;
+            }
+            .search-buttons {
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 50px;
+                right: 10px;
+                max-height: calc(100vh - 100px);
+                overflow-y: auto;
+            }
+            .search-buttons button {
+                background-color: #2a2e38;
+                border: none;
+                color: #fff;
+                padding: 10px;
+                margin: 5px 0;
+                border-radius: 10px;
+                cursor: pointer;
+                flex-shrink: 0;
+            }
+            .search-buttons button:hover {
+                background-color: #ff4c4c;
+            }
+            nav {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #2a2e38;
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 0;
+            }
+            nav a {
+                color: #fff;
+                text-decoration: none;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                flex: 1;
+            }
+            nav a.active {
+                color: #ff0000;
+            }
+            nav a:hover {
+                color: #ff4c4c;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Wibuku - Catalog</h2>
+        <h3 id="categoryHeader" class="ctgh">Semua anime dan manga</h3>
+        <div id="resultsContainer" class="results"></div>
+    </div>
+    <div class="search-buttons" id="filterButtons"></div>
+    <nav>
+        <a href="1_anime.html"><i class="material-icons">home</i></a>
+        <a href="2_manga.html"><i class="material-icons">menu_book</i></a>
+        <a href="#" class="active"><i class="material-icons">library_books</i></a>
+        <a href="4_chat.html"><i class="material-icons">chat</i></a>
+        <a href="5_contact.html"><i class="material-icons">contact_support</i></a>
+        <a href="6_profile.html"><i class="material-icons">account_circle</i></a>
+    </nav>
+    <script>
+        var data = {
+            '#': [
+                { title: "Naruto", img: "../anime/image/2.43__Seiin_Koukou_Danshi_Volley-bu.jpeg", link: "naruto.html" },
+                { title: "One Piece", img: "../anime/image/2.43__Seiin_Koukou_Danshi_Volley-bu.jpeg", link: "one_piece.html" },
+                { title: "Naruto (Manga)", img: "images/naruto_manga.jpg", link: "naruto_manga.html" },
+                { title: "One Piece (Manga)", img: "images/one_piece_manga.jpg", link: "one_piece_manga.html" }
+            ],
+            'A': [
+                { title: "Attack on Titan", img: "images/attack_on_titan.jpg", link: "attack_on_titan.html" },
+                { title: "Attack on Titan (Manga)", img: "images/attack_on_titan_manga.jpg", link: "attack_on_titan_manga.html" }
+            ],
+            'M': [
+                { title: "My Hero Academia", img: "images/my_hero_academia.jpg", link: "my_hero_academia.html" },
+                { title: "My Hero Academia (Manga)", img: "images/my_hero_academia_manga.jpg", link: "my_hero_academia_manga.html" }
+            ]
+        };
+
+        function renderResults(items) {
+            var resultsContainer = document.getElementById('resultsContainer');
+            resultsContainer.innerHTML = items.map(item => `
+                <div class="result-item" onclick="window.location.href='${item.link}'">
+                    <img src="${item.img}" alt="${item.title}">
+                    <div class="title">${item.title}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderFilterButtons() {
+            var filterButtonsContainer = document.getElementById('filterButtons');
+            var buttonsHTML = '';
+            for (var key in data) {
+                buttonsHTML += `<button onclick="filterResults('${key}')">${key}</button>`;
+            }
+            filterButtonsContainer.innerHTML = buttonsHTML;
+        }
+
+        function filterResults(category) {
+            document.getElementById('categoryHeader').textContent = (category === '#') ? 'Semua anime dan manga' : category;
+            renderResults(data[category]);
+        }
+
+        renderResults(data['#']);
+        renderFilterButtons();
+    </script>
+</body>
+</html>
